@@ -15,17 +15,19 @@
     <div class="row">
         <div class="col-xs-12">
             <form action="{% url 'search:results' %}" class="form-horizontal" id="formSearch" method="get" role="search">
+                {{ selectDocTypeForm }}
                 {% if setting_disable_simple_search == False %}
                     <div class="col-sm-2">
                 {% else %}
                     <div class="col-sm-8">
                 {% endif %}
-                    <select class="form-control" id="selectSearchModel" name="_search_model_name">
+                <input type="hidden" class="form-control" id="selectSearchModel" name="_search_model_name" value="documents.Document">
+                    <!-- <select class="form-control" id="selectSearchModel" name="_search_model_name">
                         {% for search_model in search_models %}
                         {{ search_model.self.get_full_name }}
                             <option {% if search_model.get_full_name == 'documents.Document' %}selected{% endif %} value="{{ search_model.get_full_name }}">{{ search_model }}</option>
                         {% endfor %}
-                    </select>
+                    </select> -->
                 </div>
 
                 {% if setting_disable_simple_search == False %}

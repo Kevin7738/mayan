@@ -21,6 +21,7 @@ from .menus import menu_tools, menu_setup
 from .permissions_runtime import permission_error_log_view
 from .settings import setting_home_view
 
+from mayan.apps.documents.forms import DocumentTypeFilteredSelectForm
 
 class AboutView(SimpleView):
     extra_context = {'title': _('About')}
@@ -92,6 +93,7 @@ class FaviconRedirectView(RedirectView):
 class HomeView(SimpleView):
     extra_context = {
         'title': _('Dashboard'),
+        'selectDocTypeForm': DocumentTypeFilteredSelectForm()
     }
     template_name = 'appearance/home.html'
 
