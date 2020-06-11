@@ -21,7 +21,11 @@
                     <div class="col-sm-8">
                 {% endif %}
                 <input type="hidden" class="form-control" id="selectSearchModel" name="_search_model_name" value="documents.Document">
+                <input type="hidden" class="form-control" id="matchAll" name="_match_all" value="on">
                 {{ selectDocTypeForm }}
+                {{ TagSelectForm }}
+                <!-- {{ testxxx }} -->
+                <!-- {{ test }} -->
                     <!-- <select class="form-control" id="selectSearchModel" name="_search_model_name">
                         {% for search_model in search_models %}
                         {{ search_model.self.get_full_name }}

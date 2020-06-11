@@ -4,8 +4,9 @@ from django.utils.translation import ugettext_lazy as _
 from mayan.apps.acls.models import AccessControlList
 
 from ..models import DocumentType, DocumentTypeFilename
-
-__all__ = ('DocumentTypeFilteredSelectForm', 'DocumentTypeFilenameForm_create', 'DocumentTypeSelectFormInSearch')
+from mayan.apps.tags.models import Tag
+from mayan.apps.tags.widgets import TagFormWidget
+__all__ = ('DocumentTypeFilteredSelectForm', 'DocumentTypeFilenameForm_create', 'DocumentTypeSelectFormInSearch', 'TagSelectFormInSearch')
 
 
 class DocumentTypeFilteredSelectForm(forms.Form):
@@ -44,11 +45,7 @@ class DocumentTypeFilteredSelectForm(forms.Form):
         )
 
 class DocumentTypeSelectFormInSearch(forms.Form):
-    """
-    Form to select the document type of a document to be created. This form
-    is meant to be reused and reconfigured by other apps. Example: Used
-    as form #1 in the document creation wizard.
-    """
+    
     def __init__(self, *args, **kwargs):
         help_text = kwargs.pop('help_text', None)
         if kwargs.pop('allow_multiple', False):
@@ -78,6 +75,43 @@ class DocumentTypeSelectFormInSearch(forms.Form):
             to_field_name='label',
             **extra_kwargs
         )
+
+class TagSelectFormInSearch(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        help_text = kwargs.pop('help_text', None)
+        if kwargs.pop('allow_multiple', False):
+            extra_kwargs = {}
+            field_class = forms.ModelMultipleChoiceField
+            widget_class = forms.widgets.SelectMultiple
+        else:
+            extra_kwargs = {'empty_label': None}
+            field_class = forms.ModelChoiceField
+            widget_class = forms.widgets.Select
+
+        permission = kwargs.pop('permission', None)
+        user = kwargs.pop('user', None)
+
+        super(TagSelectFormInSearch, self).__init__(*args, **kwargs)
+
+        queryset = Tag.objects.all()
+        if permission:
+            queryset = AccessControlList.objects.restrict_queryset(
+                permission=permission, queryset=queryset, user=user
+            )
+
+        self.fields['tags__label'] = field_class(
+            help_text=help_text, label=_('Select Tag'),
+            queryset=queryset, required=True,
+            widget=widget_class(attrs={'class': 'select2', 'size': 10}),
+            to_field_name='label',
+            **extra_kwargs
+        )
+    
+    def media(self):
+        return forms.Media(js=('tags/js/tags_form.js',))
+        # class Media:
+        #     js = ('tags/js/tags_form.js',)
 
 class DocumentTypeFilenameForm_create(forms.ModelForm):
     """

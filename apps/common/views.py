@@ -22,7 +22,8 @@ from .permissions_runtime import permission_error_log_view
 from .settings import setting_home_view
 
 from mayan.apps.documents.forms import DocumentTypeFilteredSelectForm
-from mayan.apps.documents.forms import DocumentTypeSelectFormInSearch
+from mayan.apps.documents.forms import DocumentTypeSelectFormInSearch, TagSelectFormInSearch
+# from mayan.apps.tags.forms import TagSelectionForm
 
 class AboutView(SimpleView):
     extra_context = {'title': _('About')}
@@ -94,7 +95,9 @@ class FaviconRedirectView(RedirectView):
 class HomeView(SimpleView):
     extra_context = {
         'title': _('Dashboard'),
-        'selectDocTypeForm': DocumentTypeSelectFormInSearch()
+        'selectDocTypeForm': DocumentTypeSelectFormInSearch(),
+        'TagSelectForm': TagSelectFormInSearch(),
+        # 'testxxx': TagSelectionForm(),
     }
     template_name = 'appearance/home.html'
 
