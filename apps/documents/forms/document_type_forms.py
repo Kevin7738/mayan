@@ -5,7 +5,7 @@ from mayan.apps.acls.models import AccessControlList
 
 from ..models import DocumentType, DocumentTypeFilename
 
-__all__ = ('DocumentTypeFilteredSelectForm', 'DocumentTypeFilenameForm_create', 'DocumentTypeFilteredSelectFormx')
+__all__ = ('DocumentTypeFilteredSelectForm', 'DocumentTypeFilenameForm_create', 'DocumentTypeSelectFormInSearch')
 
 
 class DocumentTypeFilteredSelectForm(forms.Form):
@@ -43,7 +43,7 @@ class DocumentTypeFilteredSelectForm(forms.Form):
             **extra_kwargs
         )
 
-class DocumentTypeFilteredSelectFormx(forms.Form):
+class DocumentTypeSelectFormInSearch(forms.Form):
     """
     Form to select the document type of a document to be created. This form
     is meant to be reused and reconfigured by other apps. Example: Used
@@ -63,7 +63,7 @@ class DocumentTypeFilteredSelectFormx(forms.Form):
         permission = kwargs.pop('permission', None)
         user = kwargs.pop('user', None)
 
-        super(DocumentTypeFilteredSelectFormx, self).__init__(*args, **kwargs)
+        super(DocumentTypeSelectFormInSearch, self).__init__(*args, **kwargs)
 
         queryset = DocumentType.objects.all()
         if permission:
@@ -75,6 +75,7 @@ class DocumentTypeFilteredSelectFormx(forms.Form):
             help_text=help_text, label=_('Document type'),
             queryset=queryset, required=True,
             widget=widget_class(attrs={'class': 'select2', 'size': 10}),
+            to_field_name='label',
             **extra_kwargs
         )
 
