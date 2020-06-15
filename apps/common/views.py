@@ -22,7 +22,7 @@ from .permissions_runtime import permission_error_log_view
 from .settings import setting_home_view
 
 from mayan.apps.documents.forms import DocumentTypeFilteredSelectForm
-from mayan.apps.documents.forms import DocumentTypeSelectFormInSearch, TagSelectFormInSearch
+from mayan.apps.documents.forms import DocumentTypeSelectFormInSearch, TagSelectFormInSearch, MetadataTypeSelectFormInSearch
 # from mayan.apps.tags.forms import TagSelectionForm
 
 class AboutView(SimpleView):
@@ -97,6 +97,7 @@ class HomeView(SimpleView):
         'title': _('Dashboard'),
         'selectDocTypeForm': DocumentTypeSelectFormInSearch(),
         'TagSelectForm': TagSelectFormInSearch(),
+        'metadataTypeSelectForm': MetadataTypeSelectFormInSearch(),
         # 'testxxx': TagSelectionForm(),
     }
     template_name = 'appearance/home.html'
