@@ -18,13 +18,15 @@
                 {% if setting_disable_simple_search == False %}
                     <div class="col-sm-2">
                 {% else %}
-                    <div class="col-sm-8">
+                    <div class="col-sm-6">
                 {% endif %}
                 <input type="hidden" class="form-control" id="selectSearchModel" name="_search_model_name" value="documents.Document">
                 <input type="hidden" class="form-control" id="matchAll" name="_match_all" value="on">
                 {{ selectDocTypeForm }}
                 {{ TagSelectForm }}
-                {{ metadataTypeSelectForm }}
+                {{ metadataTypeSelectForm }}            
+                <!-- <label for="value">Value: <input class="form-control" id="metadataTypeValue" name="metadata__value" value=""></label>   -->
+                {{ metadataValueSelectForm }}
                 <!-- {{ testxxx }} -->
                 <!-- {{ test }} -->
                     <!-- <select class="form-control" id="selectSearchModel" name="_search_model_name">
