@@ -95,6 +95,7 @@ class TagSelectFormInSearch(forms.Form):
 
         super(TagSelectFormInSearch, self).__init__(*args, **kwargs)
 
+        # queryset = Tag.objects.all().order_by('documents').filter(documents__pk__in=[1, 2])
         queryset = Tag.objects.all().order_by('label')
         if permission:
             queryset = AccessControlList.objects.restrict_queryset(
