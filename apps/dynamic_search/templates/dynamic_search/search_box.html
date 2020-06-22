@@ -10,23 +10,40 @@
 <div class="row">
 <div class="col-xs-6 col-xs-offset-3">
     {% endif %}
+    
+<!-- <div style="text-align: center; font-size: 200%;">
+    <a href="/home/search">
+        <button>Search</button>
+    </a>
+</div> -->
+
 
 <div class="well center-block">
     <div class="row">
         <div class="col-xs-12">
+            <!-- <form action="{% url 'search:results' %}" class="form-horizontal" method="GET" name="ab">
+                {{ selectDocTypeForm }}
+                <button class="btn btn-default" type="submit">{% trans 'Search' %}</button>
+            </form> -->
+            
             <form action="{% url 'search:results' %}" class="form-horizontal" id="formSearch" method="get" role="search">
                 {% if setting_disable_simple_search == False %}
                     <div class="col-sm-2">
                 {% else %}
                     <div class="col-sm-6">
                 {% endif %}
+
+                
+
                 <input type="hidden" class="form-control" id="selectSearchModel" name="_search_model_name" value="documents.Document">
                 <input type="hidden" class="form-control" id="matchAll" name="_match_all" value="on">
+                
                 {{ selectDocTypeForm }}
+                {{ metadataTypeSelectForm }} 
+                {{ metadataValueSelectForm }}           
                 {{ TagSelectForm }}
-                {{ metadataTypeSelectForm }}            
                 <!-- <label for="value">Value: <input class="form-control" id="metadataTypeValue" name="metadata__value" value=""></label>   -->
-                {{ metadataValueSelectForm }}
+                
                 <!-- {{ testxxx }} -->
                 <!-- {{ test }} -->
                     <!-- <select class="form-control" id="selectSearchModel" name="_search_model_name">
@@ -74,5 +91,11 @@
         $selectSearchModel.change(function () {
             $btnSearchAdvanced.attr('href', "{% url 'search:search_advanced' %}?_search_model_name=" + $(this).val());
         });
+
+        // let documentTypeSelect = $('#id_document_type__label');
+        // documentTypeSelect.change(function (event) {
+        //     // TODO: fix url appending
+        //     window.location.href = window.location.href + "?document_type__label=" + encodeURIComponent($(this).find(":selected").val());
+        // });
     });
 </script>

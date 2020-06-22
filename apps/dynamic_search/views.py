@@ -26,6 +26,8 @@ class ResultsView(SearchModelMixin, SingleObjectListView):
             'no_results_title': _('No search results'),
             'search_model': self.search_model,
             'title': _('Search results for: %s') % self.search_model.label,
+            # 'title': _('Search results for: %s') % self.request.GET.get('_match_all'),
+
         }
 
         if self.search_model.list_mode == LIST_MODE_CHOICE_ITEM:

@@ -60,7 +60,7 @@ class DocumentTypeSelectFormInSearch(forms.Form):
 
         permission = kwargs.pop('permission', None)
         user = kwargs.pop('user', None)
-
+    
         super(DocumentTypeSelectFormInSearch, self).__init__(*args, **kwargs)
 
         queryset = DocumentType.objects.all().order_by('label')
@@ -128,13 +128,22 @@ class MetadataValueSelectFormInSearch(forms.Form):
             extra_kwargs = {'empty_label': None}
             field_class = forms.ModelChoiceField
             widget_class = forms.widgets.Select
-
+            
         permission = kwargs.pop('permission', None)
         user = kwargs.pop('user', None)
 
         super(MetadataValueSelectFormInSearch, self).__init__(*args, **kwargs)
 
+        # if query attributes have docuemnt_type__label:
+            # Find the document type using the label of the document type.
+            # if the document type matching the document_type__label is found:
+                # save the id of the matching document type.
+                # finder the doucment metadata objects query using the document type id as the filter.
+
+                # Set the value of the document type select form item to the document type.
+
         queryset = DocumentMetadata.objects.all().order_by('value').distinct('value')
+        # queryset = DocumentMetadata.objects.all().order_by('value').distinct('value').filter(document__pk=2)
         if permission:
             queryset = AccessControlList.objects.restrict_queryset(
                 permission=permission, queryset=queryset, user=user
