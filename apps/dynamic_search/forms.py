@@ -1,6 +1,8 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
+from mayan.apps.documents.models import DocumentType
+from mayan.apps.metadata.models import MetadataType, DocumentMetadata
 
 class AdvancedSearchForm(forms.Form):
     _match_all = forms.BooleanField(
@@ -26,3 +28,74 @@ class SearchForm(forms.Form):
     q = forms.CharField(
         max_length=128, label=_('Search terms'), required=False
     )
+
+
+class ContactForm1(forms.Form):
+    inputDocType = forms.CharField(max_length=100)
+
+class ContactForm2(forms.Form):
+    inputMetadataType = forms.CharField(max_length=100)
+
+class DocumentTypeSelectFormInSearch(forms.Form):
+    
+    def __init__(self, *args, **kwargs):
+        help_text = kwargs.pop('help_text', None)
+        if kwargs.pop('allow_multiple', False):
+            extra_kwargs = {}
+            field_class = forms.ModelMultipleChoiceField
+            widget_class = forms.widgets.SelectMultiple
+        else:
+            extra_kwargs = {'empty_label': None}
+            field_class = forms.ModelChoiceField
+            widget_class = forms.widgets.Select
+
+        permission = kwargs.pop('permission', None)
+        user = kwargs.pop('user', None)
+    
+        super(DocumentTypeSelectFormInSearch, self).__init__(*args, **kwargs)
+
+        queryset = DocumentType.objects.all().order_by('label')
+        if permission:
+            queryset = AccessControlList.objects.restrict_queryset(
+                permission=permission, queryset=queryset, user=user
+            )
+
+        self.fields['document_type__label'] = field_class(
+            help_text=help_text, label=_('Document type'),
+            queryset=queryset, required=True,
+            widget=widget_class(attrs={'class': 'select2', 'size': 10}),
+            to_field_name='label',
+            **extra_kwargs
+        )
+    
+class MetadataTypeSelectFormInSearch(forms.Form):
+    
+    def __init__(self, *args, **kwargs):
+        help_text = kwargs.pop('help_text', None)
+        if kwargs.pop('allow_multiple', False):
+            extra_kwargs = {}
+            field_class = forms.ModelMultipleChoiceField
+            widget_class = forms.widgets.SelectMultiple
+        else:
+            extra_kwargs = {'empty_label': None}
+            field_class = forms.ModelChoiceField
+            widget_class = forms.widgets.Select
+
+        permission = kwargs.pop('permission', None)
+        user = kwargs.pop('user', None)
+
+        super(MetadataTypeSelectFormInSearch, self).__init__(*args, **kwargs)
+
+        queryset = MetadataType.objects.all()
+        if permission:
+            queryset = AccessControlList.objects.restrict_queryset(
+                permission=permission, queryset=queryset, user=user
+            )
+
+        self.fields['metadata__metadata_type__name'] = field_class(
+            help_text=help_text, label=_('Metadata type'),
+            queryset=queryset, required=True,
+            widget=widget_class(attrs={'class': 'select2', 'size': 10}),
+            to_field_name='label',
+            **extra_kwargs
+        )    

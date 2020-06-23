@@ -23,7 +23,6 @@ from .settings import setting_home_view
 
 from mayan.apps.documents.forms import DocumentTypeFilteredSelectForm
 from mayan.apps.documents.forms import DocumentTypeSelectFormInSearch, TagSelectFormInSearch, MetadataTypeSelectFormInSearch, MetadataValueSelectFormInSearch
-# from mayan.apps.tags.forms import TagSelectionForm
 
 class AboutView(SimpleView):
     extra_context = {'title': _('About')}

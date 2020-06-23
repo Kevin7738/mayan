@@ -12,6 +12,11 @@ from .icons import icon_search_submit
 from .mixins import SearchModelMixin
 from .runtime import search_backend
 
+from django.shortcuts import render
+from formtools.wizard.views import SessionWizardView
+from mayan.apps.dynamic_search.forms import ContactForm1, ContactForm2, DocumentTypeSelectFormInSearch, MetadataTypeSelectFormInSearch
+from django.http import HttpResponseRedirect
+
 logger = logging.getLogger(name=__name__)
 
 
@@ -96,3 +101,41 @@ class AdvancedSearchView(SearchView):
 class SearchAgainView(RedirectView):
     pattern_name = 'search:search_advanced'
     query_string = True
+
+class ContactWizard(SessionWizardView):
+    template_name = 'dynamic_search/wizard_form.html'
+    # Can do? subtitle "Hooking the wizard into a URLconf"
+    # https://django-formtools.readthedocs.io/en/latest/wizard.html#wizard-template-for-each-form
+    form_list = [DocumentTypeSelectFormInSearch, MetadataTypeSelectFormInSearch]
+
+    # def get_context_data(self, form, **kwargs):
+    # context = super(ContactWizard, self).get_context_data(form=form, **kwargs)
+    # if self.steps.current == 'DocumentTypeSelectFormInSearch':
+    #     dt = self.get_cleaned_data_for_step('0')['document_type__label']
+    #     context.update(
+    #         {
+    #             'document_type__label': dt
+    #         }
+    #     )
+    # return context
+  
+    def done(self, form_list, **kwargs):
+        
+        query_dict = {}
+        # query_dict.update('?_search_model_name' : 'documents.Document&')
+        # query_dict.update(step.done(wizard=self) or {})
+
+        # cleaned_data = wizard.get_cleaned_data_for_step(step=cls.name)
+        # if cleaned_data:
+        #     return {
+        #         'document_type_id': cleaned_data['document_type'].pk
+        #     }
+        
+        
+        # cleaned_data = wizard.get_cleaned_data_for_step('0')
+        dt = self.get_cleaned_data_for_step('0')['document_type__label'].label
+        
+
+
+        return HttpResponseRedirect(reverse('search:results')+'?_search_model_name=documents.Document&'+'document_type__label='+dt)
+        # return HttpResponseRedirect(reverse('search:results'))

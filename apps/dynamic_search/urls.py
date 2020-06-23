@@ -4,7 +4,7 @@ from .api_views import (
     APIAdvancedSearchView, APISearchModelList, APISearchView
 )
 from .views import (
-    AdvancedSearchView, ResultsView, SearchAgainView, SearchView
+    AdvancedSearchView, ResultsView, SearchAgainView, SearchView, ContactWizard
 )
 
 urlpatterns = [
@@ -30,7 +30,12 @@ urlpatterns = [
     url(
         regex=r'^search/(?P<search_model_name>[\.\w]+)/$', name='search',
         view=SearchView.as_view()
-    )
+    ),
+
+    # WHY   can't put here???
+    # url(regex=r'^home/search/$', name='con', view=ContactWizard.as_view([ContactForm1, ContactForm2])),
+
+  
 ]
 
 api_urls = [
