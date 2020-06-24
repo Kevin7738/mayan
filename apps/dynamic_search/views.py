@@ -118,7 +118,14 @@ class ContactWizard(SessionWizardView):
     #         }
     #     )
     # return context
-  
+    def get_form_kwargs(self, step=None):
+        kwargs = {}
+        if step == '1':
+            step0_doc_id = self.get_cleaned_data_for_step('0')['document_type__label'].pk
+            kwargs.update({'step0_doc_id' : step0_doc_id,})
+        return kwargs
+
+        
     def done(self, form_list, **kwargs):
         
         query_dict = {}
@@ -134,7 +141,7 @@ class ContactWizard(SessionWizardView):
         
         # cleaned_data = wizard.get_cleaned_data_for_step('0')
         documentType = self.get_cleaned_data_for_step('0')['document_type__label'].label
-        metadataType1 = self.get_cleaned_data_for_step('1')['metadata__metadata_type__name'].metadata_type
+        metadataType1 = self.get_cleaned_data_for_step('1')['metadata__metadata_type__name'].name
 
 
 
@@ -142,6 +149,6 @@ class ContactWizard(SessionWizardView):
         '?_search_model_name=documents.Document&'+
         '_match_all=on'+
         'document_type__label='+documentType+
-        '&metadata__metadata_type__name='
+        '&metadata__metadata_type__name='+metadataType1+'&q='
         )
         # return HttpResponseRedirect(reverse('search:results'))

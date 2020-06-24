@@ -6,7 +6,7 @@ from mayan.apps.acls.models import AccessControlList
 from ..models import DocumentType, DocumentTypeFilename
 from mayan.apps.tags.models import Tag
 from mayan.apps.tags.widgets import TagFormWidget
-from mayan.apps.metadata.models import MetadataType, DocumentMetadata
+from mayan.apps.metadata.models import MetadataType, DocumentMetadata, DocumentTypeMetadataType
 __all__ = ('MetadataValueSelectFormInSearch', 'MetadataTypeSelectFormInSearch', 'DocumentTypeFilteredSelectForm', 'DocumentTypeFilenameForm_create', 'DocumentTypeSelectFormInSearch', 'TagSelectFormInSearch')
 
 
@@ -175,7 +175,9 @@ class MetadataTypeSelectFormInSearch(forms.Form):
 
         super(MetadataTypeSelectFormInSearch, self).__init__(*args, **kwargs)
 
-        queryset = MetadataType.objects.all()
+        # queryset = DocumentTypeMetadataType.objects.all().order_by('metadata_type_id').distinct('metadata_type_id').filter(document_type__pk=1)
+        k = DocumentTypeMetadataType.objects.all().values_list('metadata_type_id', flat=True).filter(document_type__pk=1)
+        queryset = MetadataType.objects.all().filter(pk__in=k)
         if permission:
             queryset = AccessControlList.objects.restrict_queryset(
                 permission=permission, queryset=queryset, user=user
@@ -185,7 +187,7 @@ class MetadataTypeSelectFormInSearch(forms.Form):
             help_text=help_text, label=_('Metadata type'),
             queryset=queryset, required=True,
             widget=widget_class(attrs={'class': 'select2', 'size': 10}),
-            to_field_name='label',
+            to_field_name='name',
             **extra_kwargs
         )
 class DocumentTypeFilenameForm_create(forms.ModelForm):
