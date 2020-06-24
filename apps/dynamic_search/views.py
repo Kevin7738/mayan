@@ -141,7 +141,11 @@ class ContactWizard(SessionWizardView):
         
         # cleaned_data = wizard.get_cleaned_data_for_step('0')
         documentType = self.get_cleaned_data_for_step('0')['document_type__label'].label
-        metadataType1 = self.get_cleaned_data_for_step('1')['metadata__metadata_type__name'].name
+        metadataSelectResult = self.get_cleaned_data_for_step('1')['metadata__metadata_type__name']
+        if metadataSelectResult is None:
+            metadataType = ''
+        else:
+            metadataType = metadataSelectResult.name
 
 
 
@@ -149,6 +153,6 @@ class ContactWizard(SessionWizardView):
         '?_search_model_name=documents.Document&'+
         '_match_all=on'+
         '&document_type__label='+documentType+
-        '&metadata__metadata_type__name='+metadataType1+'&q='
+        '&metadata__metadata_type__name='+metadataType+'&q='
         )
         # return HttpResponseRedirect(reverse('search:results'))

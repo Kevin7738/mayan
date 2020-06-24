@@ -176,8 +176,11 @@ class MetadataTypeSelectFormInSearch(forms.Form):
         super(MetadataTypeSelectFormInSearch, self).__init__(*args, **kwargs)
 
         # queryset = DocumentTypeMetadataType.objects.all().order_by('metadata_type_id').distinct('metadata_type_id').filter(document_type__pk=1)
-        k = DocumentTypeMetadataType.objects.all().values_list('metadata_type_id', flat=True).filter(document_type__pk=1)
-        queryset = MetadataType.objects.all().filter(pk__in=k)
+        k = DocumentTypeMetadataType.objects.all().values_list('metadata_type_id', flat=True).filter(document_type__pk=2)
+        # if k:
+        #     queryset = MetadataType.objects.all().filter(pk__in=k)
+        # else:
+        #     queryset = MetadataType.objects.none()
         if permission:
             queryset = AccessControlList.objects.restrict_queryset(
                 permission=permission, queryset=queryset, user=user
@@ -185,9 +188,9 @@ class MetadataTypeSelectFormInSearch(forms.Form):
 
         self.fields['metadata__metadata_type__name'] = field_class(
             help_text=help_text, label=_('Metadata type'),
-            queryset=queryset, required=True,
+            queryset=k, required=True,
             widget=widget_class(attrs={'class': 'select2', 'size': 10}),
-            to_field_name='name',
+            # to_field_name='name',
             **extra_kwargs
         )
 class DocumentTypeFilenameForm_create(forms.ModelForm):

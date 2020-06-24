@@ -98,7 +98,7 @@ class MetadataTypeSelectFormInSearch(forms.Form):
 
         self.fields['metadata__metadata_type__name'] = field_class(
             help_text=help_text, label=_('Metadata type'),
-            queryset=queryset, required=True,
+            queryset=queryset, required=False,
             widget=widget_class(attrs={'class': 'select2', 'size': 10}),
             to_field_name='name',
             **extra_kwargs
