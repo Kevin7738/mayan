@@ -148,7 +148,7 @@ class ContactWizard(SessionWizardView):
         return HttpResponseRedirect(reverse('search:results')+
         '?_search_model_name=documents.Document&'+
         '_match_all=on'+
-        'document_type__label='+documentType+
+        '&document_type__label='+documentType+
         '&metadata__metadata_type__name='+metadataType1+'&q='
         )
         # return HttpResponseRedirect(reverse('search:results'))
