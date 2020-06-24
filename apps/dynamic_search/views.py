@@ -14,7 +14,7 @@ from .runtime import search_backend
 
 from django.shortcuts import render
 from formtools.wizard.views import SessionWizardView
-from mayan.apps.dynamic_search.forms import ContactForm1, ContactForm2, DocumentTypeSelectFormInSearch, MetadataTypeSelectFormInSearch
+from mayan.apps.dynamic_search.forms import DocumentTypeSelectFormInSearch, MetadataTypeSelectFormInSearch, MetadataValueSelectFormInSearch
 from django.http import HttpResponseRedirect
 
 logger = logging.getLogger(name=__name__)
@@ -106,7 +106,11 @@ class ContactWizard(SessionWizardView):
     template_name = 'dynamic_search/wizard_form.html'
     # Can do? subtitle "Hooking the wizard into a URLconf"
     # https://django-formtools.readthedocs.io/en/latest/wizard.html#wizard-template-for-each-form
-    form_list = [DocumentTypeSelectFormInSearch, MetadataTypeSelectFormInSearch]
+    form_list = [
+        DocumentTypeSelectFormInSearch, 
+        MetadataTypeSelectFormInSearch,
+        MetadataValueSelectFormInSearch,
+    ]
 
     # def get_context_data(self, form, **kwargs):
     # context = super(ContactWizard, self).get_context_data(form=form, **kwargs)
@@ -123,6 +127,11 @@ class ContactWizard(SessionWizardView):
         if step == '1':
             step0_doc_id = self.get_cleaned_data_for_step('0')['document_type__label'].pk
             kwargs.update({'step0_doc_id' : step0_doc_id,})
+
+        if step =='2':
+            step1_docMetadataType_id = self.get_cleaned_data_for_step('1')['metadata__metadata_type__name'].pk
+            kwargs.update({'step1_docMetadataType_id' : step1_docMetadataType_id,})
+        
         return kwargs
 
         
@@ -141,18 +150,22 @@ class ContactWizard(SessionWizardView):
         
         # cleaned_data = wizard.get_cleaned_data_for_step('0')
         documentType = self.get_cleaned_data_for_step('0')['document_type__label'].label
+        
         metadataSelectResult = self.get_cleaned_data_for_step('1')['metadata__metadata_type__name']
         if metadataSelectResult is None:
             metadataType = ''
         else:
             metadataType = metadataSelectResult.name
 
+        metadataValue = self.get_cleaned_data_for_step('2')['metadata__value'].value
 
 
         return HttpResponseRedirect(reverse('search:results')+
         '?_search_model_name=documents.Document&'+
         '_match_all=on'+
         '&document_type__label='+documentType+
-        '&metadata__metadata_type__name='+metadataType+'&q='
+        '&metadata__metadata_type__name='+metadataType+
+        '&metadata__value='+metadataValue+
+        '&q='
         )
         # return HttpResponseRedirect(reverse('search:results'))
