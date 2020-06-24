@@ -128,10 +128,16 @@ class ContactWizard(SessionWizardView):
             step0_doc_id = self.get_cleaned_data_for_step('0')['document_type__label'].pk
             kwargs.update({'step0_doc_id' : step0_doc_id,})
 
-        if step =='2':
+        # if step == '2':
+        #     if self.get_cleaned_data_for_step('1')['metadata__metadata_type__name'] is not None:
+        #         step1_docMetadataType_id = self.get_cleaned_data_for_step('1')['metadata__metadata_type__name'].pk
+        #         kwargs.update({'current_queryset' : 'DocumentTypeMetadataType.objects.all().values_list('metadata_type_id', flat=True).filter(document_type__pk='+step1_docMetadataType_id})
+        #         # kwargs.update({'step1_docMetadataType_id' : step1_docMetadataType_id,})
+        #     else:
+        #          kwargs.update({'current_queryset' : DocumentTypeMetadataType.objects.all().None()})
+        if step == '2':
             step1_docMetadataType_id = self.get_cleaned_data_for_step('1')['metadata__metadata_type__name'].pk
             kwargs.update({'step1_docMetadataType_id' : step1_docMetadataType_id,})
-        
         return kwargs
 
         
@@ -154,10 +160,20 @@ class ContactWizard(SessionWizardView):
         metadataSelectResult = self.get_cleaned_data_for_step('1')['metadata__metadata_type__name']
         if metadataSelectResult is None:
             metadataType = ''
+
         else:
             metadataType = metadataSelectResult.name
-
-        metadataValue = self.get_cleaned_data_for_step('2')['metadata__value'].value
+        
+        metadataValue = ''
+        if metadataType is None:
+            metadataValue = ''
+        else:
+            metadataValueSelectResult = self.get_cleaned_data_for_step('2')['metadata__value']
+            if metadataValueSelectResult is None:
+                metadataValue = ''
+            else:
+                metadataValue = metadataValueSelectResult.value
+        
 
 
         return HttpResponseRedirect(reverse('search:results')+

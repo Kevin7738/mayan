@@ -84,10 +84,9 @@ class MetadataTypeSelectFormInSearch(forms.Form):
         permission = kwargs.pop('permission', None)
         user = kwargs.pop('user', None)
         doc_pk = kwargs.pop('step0_doc_id')
+        # qs = kwargs.pop('current_queryset')
         super(MetadataTypeSelectFormInSearch, self).__init__(*args, **kwargs)
 
-        # queryset = DocumentTypeMetadataType.objects.all().order_by('metadata_type_id').distinct('metadata_type_id').filter(document_type__pk=1)
-        # queryset = DocumentTypeMetadataType.objects.all().order_by('metadata_type_id').distinct('metadata_type_id').filter(document_type__pk=doc_pk)
         
         k = DocumentTypeMetadataType.objects.all().values_list('metadata_type_id', flat=True).filter(document_type__pk=doc_pk)
         queryset = MetadataType.objects.all().filter(pk__in=k)
@@ -133,7 +132,7 @@ class MetadataValueSelectFormInSearch(forms.Form):
 
         self.fields['metadata__value'] = field_class(
             help_text=help_text, label=_('Choose value of metadata'),
-            queryset=queryset, required=True,
+            queryset=queryset, required=False,
             widget=widget_class(attrs={'class': 'select2', 'size': 10}),
             to_field_name='value',
             **extra_kwargs
