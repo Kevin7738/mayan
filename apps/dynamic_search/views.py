@@ -133,9 +133,15 @@ class ContactWizard(SessionWizardView):
         
         
         # cleaned_data = wizard.get_cleaned_data_for_step('0')
-        dt = self.get_cleaned_data_for_step('0')['document_type__label'].label
-        
+        documentType = self.get_cleaned_data_for_step('0')['document_type__label'].label
+        metadataType1 = self.get_cleaned_data_for_step('1')['metadata__metadata_type__name'].metadata_type
 
 
-        return HttpResponseRedirect(reverse('search:results')+'?_search_model_name=documents.Document&'+'document_type__label='+dt)
+
+        return HttpResponseRedirect(reverse('search:results')+
+        '?_search_model_name=documents.Document&'+
+        '_match_all=on'+
+        'document_type__label='+documentType+
+        '&metadata__metadata_type__name='
+        )
         # return HttpResponseRedirect(reverse('search:results'))

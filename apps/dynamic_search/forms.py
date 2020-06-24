@@ -2,7 +2,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from mayan.apps.documents.models import DocumentType
-from mayan.apps.metadata.models import MetadataType, DocumentMetadata
+from mayan.apps.metadata.models import MetadataType, DocumentMetadata, DocumentTypeMetadataType
 
 class AdvancedSearchForm(forms.Form):
     _match_all = forms.BooleanField(
@@ -86,7 +86,8 @@ class MetadataTypeSelectFormInSearch(forms.Form):
 
         super(MetadataTypeSelectFormInSearch, self).__init__(*args, **kwargs)
 
-        queryset = MetadataType.objects.all()
+        # queryset = DocumentTypeMetadataType.objects.all().order_by('metadata_type_id').distinct('metadata_type_id').filter(document_type__pk=1)
+        queryset = DocumentTypeMetadataType.objects.all().order_by('metadata_type_id').distinct('metadata_type_id')
         if permission:
             queryset = AccessControlList.objects.restrict_queryset(
                 permission=permission, queryset=queryset, user=user
@@ -96,6 +97,6 @@ class MetadataTypeSelectFormInSearch(forms.Form):
             help_text=help_text, label=_('Metadata type'),
             queryset=queryset, required=True,
             widget=widget_class(attrs={'class': 'select2', 'size': 10}),
-            to_field_name='label',
+            # to_field_name='label',
             **extra_kwargs
         )    
