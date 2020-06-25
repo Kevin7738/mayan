@@ -16,7 +16,7 @@ from django.shortcuts import render
 from formtools.wizard.views import SessionWizardView
 from mayan.apps.dynamic_search.forms import DocumentTypeSelectFormInSearch, MetadataTypeSelectFormInSearch, MetadataValueSelectFormInSearch
 from django.http import HttpResponseRedirect
-
+from mayan.apps.metadata.models import MetadataType, DocumentMetadata, DocumentTypeMetadataType
 logger = logging.getLogger(name=__name__)
 
 
@@ -129,15 +129,17 @@ class ContactWizard(SessionWizardView):
             kwargs.update({'step0_doc_id' : step0_doc_id,})
 
         # if step == '2':
-        #     if self.get_cleaned_data_for_step('1')['metadata__metadata_type__name'] is not None:
-        #         step1_docMetadataType_id = self.get_cleaned_data_for_step('1')['metadata__metadata_type__name'].pk
-        #         kwargs.update({'current_queryset' : 'DocumentTypeMetadataType.objects.all().values_list('metadata_type_id', flat=True).filter(document_type__pk='+step1_docMetadataType_id})
-        #         # kwargs.update({'step1_docMetadataType_id' : step1_docMetadataType_id,})
-        #     else:
-        #          kwargs.update({'current_queryset' : DocumentTypeMetadataType.objects.all().None()})
+        #     step1_docMetadataType_id = self.get_cleaned_data_for_step('1')['metadata__metadata_type__name'].pk
+        #     kwargs.update({'step1_docMetadataType_id' : step1_docMetadataType_id,})
         if step == '2':
-            step1_docMetadataType_id = self.get_cleaned_data_for_step('1')['metadata__metadata_type__name'].pk
-            kwargs.update({'step1_docMetadataType_id' : step1_docMetadataType_id,})
+            hasMetadataType = self.get_cleaned_data_for_step('1')['metadata__metadata_type__name']
+            if hasMetadataType:
+                metadataType_id = hasMetadataType.pk
+                qs = DocumentMetadata.objects.all().order_by('value').distinct('value').filter(metadata_type__pk=metadataType_id)
+            else:
+                qs = DocumentMetadata.objects.all().none()
+
+            kwargs.update({'qs' : qs,})
         return kwargs
 
         

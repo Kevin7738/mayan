@@ -119,11 +119,12 @@ class MetadataValueSelectFormInSearch(forms.Form):
             
         permission = kwargs.pop('permission', None)
         user = kwargs.pop('user', None)
-        metaData_id = kwargs.pop('step1_docMetadataType_id')
+        # metaData_id = kwargs.pop('step1_docMetadataType_id')
+        qs = kwargs.pop('qs', None)
         super(MetadataValueSelectFormInSearch, self).__init__(*args, **kwargs)
 
-        # queryset = DocumentMetadata.objects.all().order_by('value').distinct('value').filter(metadata_type__pk__in=[1,2])
-        queryset = DocumentMetadata.objects.all().order_by('value').distinct('value').filter(metadata_type__pk=metaData_id)
+        queryset = qs
+        # queryset = DocumentMetadata.objects.all().order_by('value').distinct('value').filter(metadata_type__pk=metaData_id)
         # queryset = DocumentMetadata.objects.all().order_by('value').distinct('value').filter(document__pk=2)
         if permission:
             queryset = AccessControlList.objects.restrict_queryset(
