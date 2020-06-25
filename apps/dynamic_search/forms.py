@@ -125,7 +125,6 @@ class MetadataValueSelectFormInSearch(forms.Form):
 
         queryset = qs
         # queryset = DocumentMetadata.objects.all().order_by('value').distinct('value').filter(metadata_type__pk=metaData_id)
-        # queryset = DocumentMetadata.objects.all().order_by('value').distinct('value').filter(document__pk=2)
         if permission:
             queryset = AccessControlList.objects.restrict_queryset(
                 permission=permission, queryset=queryset, user=user
