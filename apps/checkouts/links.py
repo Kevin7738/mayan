@@ -29,7 +29,7 @@ def is_not_checked_out(context):
 
 
 link_check_out_list = Link(
-    icon_class=icon_check_out_info, text=_('Checkouts'),
+    icon_class=icon_check_out_info, text=_('Checkoutsxx'),
     view='checkouts:check_out_list'
 )
 link_check_out_document = Link(

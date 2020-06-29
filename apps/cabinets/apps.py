@@ -155,7 +155,7 @@ class CabinetsApp(MayanAppConfig):
             sources=(Cabinet, CabinetSearchResult)
         )
 
-        menu_main.bind_links(links=(menu_cabinets,), position=98)
+        # menu_main.bind_links(links=(menu_cabinets,), position=98)
 
         menu_multi_item.bind_links(
             links=(
