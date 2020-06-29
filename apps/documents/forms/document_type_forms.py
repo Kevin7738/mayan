@@ -174,7 +174,7 @@ class MetadataTypeSelectFormInSearch(forms.Form):
         user = kwargs.pop('user', None)
 
         super(MetadataTypeSelectFormInSearch, self).__init__(*args, **kwargs)
-
+        
         queryset = DocumentTypeMetadataType.objects.all().order_by('metadata_type_id').distinct('metadata_type_id')
         # k = DocumentTypeMetadataType.objects.all().values_list('metadata_type_id', flat=True).filter(document_type__pk=2)
         # if k:

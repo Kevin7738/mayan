@@ -9,6 +9,7 @@ from mayan.apps.common.literals import LIST_MODE_CHOICE_ITEM
 
 from .forms import SearchForm, AdvancedSearchForm
 from .icons import icon_search_submit
+from  mayan.apps.sources.icons import icon_wizard_submit
 from .mixins import SearchModelMixin
 from .runtime import search_backend
 
@@ -112,31 +113,35 @@ class ContactWizard(SessionWizardView):
         MetadataValueSelectFormInSearch,
     ]
 
-    # def get_context_data(self, form, **kwargs):
-    # context = super(ContactWizard, self).get_context_data(form=form, **kwargs)
-    # if self.steps.current == 'DocumentTypeSelectFormInSearch':
-    #     dt = self.get_cleaned_data_for_step('0')['document_type__label']
-    #     context.update(
-    #         {
-    #             'document_type__label': dt
-    #         }
-    #     )
-    # return context
+    
     def get_form_kwargs(self, step=None):
         kwargs = {}
         if step == '1':          
-            step0_doc_id = self.get_cleaned_data_for_step('0')['document_type__label'].pk
-            kwargs.update({'step0_doc_id' : step0_doc_id,})
+            document_type = self.get_cleaned_data_for_step('0')['document_type__label']
+            kwargs.update({'document_type' : document_type})
+
+            # step0_doc_id = self.get_cleaned_data_for_step('0')['document_type__label'].pk
+            # kwargs.update({'step0_doc_id' : step0_doc_id})
 
         if step == '2':
+            # hasMetadataType = self.get_cleaned_data_for_step('1')['metadata__metadata_type__name']
+            # if hasMetadataType:
+            #     metadataType_id = hasMetadataType.pk
+            #     qs = DocumentMetadata.objects.all().order_by('value').distinct('value').filter(metadata_type__pk=metadataType_id)
+            # else:
+            #     qs = DocumentMetadata.objects.all().none()
+
+            # kwargs.update({'qs' : qs,})
             hasMetadataType = self.get_cleaned_data_for_step('1')['metadata__metadata_type__name']
             if hasMetadataType:
-                metadataType_id = hasMetadataType.pk
-                qs = DocumentMetadata.objects.all().order_by('value').distinct('value').filter(metadata_type__pk=metadataType_id)
+                metadata_type_id = hasMetadataType.pk
             else:
-                qs = DocumentMetadata.objects.all().none()
-
-            kwargs.update({'qs' : qs,})
+                metadata_type_id = None
+            document_type = self.get_cleaned_data_for_step('0')['document_type__label']
+            kwargs.update({
+                'document_type' : document_type,
+                'metadata_type_id' : metadata_type_id,
+            })
         return kwargs
 
         
