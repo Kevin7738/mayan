@@ -6,41 +6,53 @@
 {{ wizard.form.media }}
 {% endblock %}
 
+
 {% block content %}
-<div class="well center-blick">
-    <div class="row" style="font-size: 27px">
-        
-        <div class="col-sm-12">
-            <p style="font-size: 40px">Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</p>
-                <!-- 
-                    TODO - Compare to author's .html like document_create
-                -->
-                <center>
-                <form action="/home/search/" method="POST">{% csrf_token %}
-                    <table>
-                    {{ wizard.management_form }}
-                    {% if wizard.form.forms %}
-                        {{ wizard.form.management_form }}
-                        {% for form in wizard.form.forms %}
-                            {{ form }}
-                        {% endfor %}
-                    {% else %}
-                        {{ wizard.form }}
-                    {% endif %}
-                    </table>
-                {% if wizard.steps.prev %}
-                <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">{% trans "first step" %}</button>
-                <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% trans "prev step" %}</button>
-                {% endif %}
 
-                <input type="submit" name="" value="Next"/>
-
-                </form>
-            </center>
-        </div>
+    <h3> Document search wizard</h3>
+    <hr>
     
-    </div>
-</div>
-
+    <h4>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</h4>
+    <hr>
+    <div class="well center-block">
+        <form action="/home/search/" method="POST">{% csrf_token %}           
+            {{ wizard.management_form }}
+            {% if wizard.form.forms %}
+                {{ wizard.form.management_form }}
+                {% for form in wizard.form.forms %}
+                    {{ form }}
+                {% endfor %}
+            {% else %}
+                {{ wizard.form }}
+            {% endif %}
+            <hr><hr><hr>
+           
+            {% if wizard.steps.prev %}
+                <button class="btn btn-primary btn-hotkey-default" name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">
+                    <i class="" style="padding-right: 5px; width: auto;" data-fa-i2svg=""><svg class="svg-inline--fa fa-step-backward fa-w-14" aria-hidden="true" data-prefix="fa" data-icon="step-backward" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M64 468V44c0-6.6 5.4-12 12-12h48c6.6 0 12 5.4 12 12v176.4l195.5-181C352.1 22.3 384 36.6 384 64v384c0 27.4-31.9 41.7-52.5 24.6L136 292.7V468c0 6.6-5.4 12-12 12H76c-6.6 0-12-5.4-12-12z"></path></svg></i>
+                    {% trans "First step" %}
+                </button>
+                &nbsp;&nbsp;
+                <button class="btn btn-primary btn-hotkey-default" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">
+                    <i style="padding-right: 5px; width: auto;" >
+                    <svg class="svg-inline--fa fa-arrow-left fa-w-14" aria-hidden="true"   viewBox="0 0 448 512">
+                        <path fill="currentColor" d="M257.5 445.1l-22.2 22.2c-9.4 9.4-24.6 9.4-33.9 0L7 273c-9.4-9.4-9.4-24.6 0-33.9L201.4 44.7c9.4-9.4 24.6-9.4 33.9 0l22.2 22.2c9.5 9.5 9.3 25-.4 34.3L136.6 216H424c13.3 0 24 10.7 24 24v32c0 13.3-10.7 24-24 24H136.6l120.5 114.8c9.8 9.3 10 24.8.4 34.3z"></path>                    </svg>
+                </i>
+                {% trans "Previous" %}
+                </button>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+            {% endif %}
+            
+            <!-- <input style="padding-right: 5px; width: auto;" class="btn btn-success btn-hotkey-default" type="submit" name="" value="Next"/> -->
+            <button class="btn btn-success" name="next" type="submit">
+                <i style="padding-right: 5px; width: auto;" >
+                    <svg class="svg-inline--fa fa-arrow-right fa-w-14" aria-hidden="true" data-prefix="fa" data-icon="arrow-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                        <path fill="currentColor" d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"></path>
+                    </svg>
+                </i>
+                Next
+            </button>
+        </form>
+    </div>       
+    
 {% endblock %}
-

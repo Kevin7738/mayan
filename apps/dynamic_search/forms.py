@@ -171,7 +171,7 @@ class MetadataValueSelectFormInSearch(forms.Form):
             )
 
         self.fields['metadata__value'] = field_class(
-            help_text=help_text, label=_('Choose value of metadata'),
+            help_text=help_text, label=_('Value of metadata'),
             queryset=queryset, required=False,
             widget=widget_class(attrs={'class': 'select2', 'size': 10}),
             to_field_name='value',
