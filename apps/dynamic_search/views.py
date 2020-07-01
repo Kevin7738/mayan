@@ -131,14 +131,6 @@ class ContactWizard(SessionWizardView):
             # kwargs.update({'step0_doc_id' : step0_doc_id})
 
         if step == '2':
-            # hasMetadataType = self.get_cleaned_data_for_step('1')['metadata__metadata_type__name']
-            # if hasMetadataType:
-            #     metadataType_id = hasMetadataType.pk
-            #     qs = DocumentMetadata.objects.all().order_by('value').distinct('value').filter(metadata_type__pk=metadataType_id)
-            # else:
-            #     qs = DocumentMetadata.objects.all().none()
-
-            # kwargs.update({'qs' : qs,})
             hasMetadataType = self.get_cleaned_data_for_step('1')['metadata__metadata_type__name']
             if hasMetadataType:
                 metadata_type_id = hasMetadataType.pk
@@ -153,15 +145,9 @@ class ContactWizard(SessionWizardView):
 
         
     def done(self, form_list, **kwargs):
-        
-        # query_dict = {}
-        # query_dict.update('?_search_model_name' : 'documents.Document&')
-        # query_dict.update(step.done(wizard=self) or {})
-
-        
         documentType = self.get_cleaned_data_for_step('0')['document_type__label'].label
-        
         metadataSelectResult = self.get_cleaned_data_for_step('1')['metadata__metadata_type__name']
+        
         if metadataSelectResult is None:
             metadataType = ''
 

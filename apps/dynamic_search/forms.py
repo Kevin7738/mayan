@@ -91,7 +91,6 @@ class MetadataTypeSelectFormInSearch(forms.Form):
         permission = kwargs.pop('permission', None)
         user = kwargs.pop('user', None)
         document_type = kwargs.pop('document_type')
-        # document_id = kwargs.pop('step0_doc_id')
 
         # All the metadata tags for the selected document type
         document_metadata_types = document_type.metadata.all()
@@ -104,9 +103,9 @@ class MetadataTypeSelectFormInSearch(forms.Form):
                 return True
             return False
 
-        # print all field for 'document_type'-------------
-        all_fields = document_type._meta.get_fields()
+        # [DEBUG]---print all field for 'document_type'----
         logger.debug("**field for document_type**")
+        all_fields = document_type._meta.get_fields()
         for name in all_fields:
             logger.debug("**************   :"+str(name))
         # -------------------------------------------------
@@ -127,7 +126,7 @@ class MetadataTypeSelectFormInSearch(forms.Form):
             )
 
         self.fields['metadata__metadata_type__name'] = field_class(
-            help_text=help_text, label=_('Metadata type'),
+            help_text=help_text, label=_('Metadata type (optional)'),
             queryset=queryset, required=False,
             widget=widget_class(attrs={'class': 'select2', 'size': 10}),
             to_field_name='name',
@@ -150,11 +149,11 @@ class MetadataValueSelectFormInSearch(forms.Form):
             
         permission = kwargs.pop('permission', None)
         user = kwargs.pop('user', None)
-        # qs = kwargs.pop('qs', None)
         
         document_type = kwargs.pop('document_type')
         metadata_type_id = kwargs.pop('metadata_type_id')
         super(MetadataValueSelectFormInSearch, self).__init__(*args, **kwargs)
+        
         # function to check if has metadata value according to document id
         def has_metadata_value(doc_id):
             if DocumentMetadata.objects.all().filter(document_id = doc_id):
@@ -166,7 +165,7 @@ class MetadataValueSelectFormInSearch(forms.Form):
         for document in documents_related_to_document_type:
             if has_metadata_value(document.id):
                 valued_document_id_list.append(document.id)
-        # queryset = qs
+
         queryset = DocumentMetadata.objects.all().order_by('value').distinct('value').filter(document_id__in=valued_document_id_list, metadata_type_id = metadata_type_id)
         if permission:
             queryset = AccessControlList.objects.restrict_queryset(
@@ -174,7 +173,7 @@ class MetadataValueSelectFormInSearch(forms.Form):
             )
 
         self.fields['metadata__value'] = field_class(
-            help_text=help_text, label=_('Value of metadata'),
+            help_text=help_text, label=_('Value of metadata (optional)'),
             queryset=queryset, required=False,
             widget=widget_class(attrs={'class': 'select2', 'size': 10}),
             to_field_name='value',
