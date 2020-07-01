@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from mayan.apps.documents.models import DocumentType
 from mayan.apps.metadata.models import MetadataType, DocumentMetadata, DocumentTypeMetadataType
-
+from mayan.apps.acls.models import AccessControlList
 logger = logging.getLogger(__name__)
 
 class AdvancedSearchForm(forms.Form):

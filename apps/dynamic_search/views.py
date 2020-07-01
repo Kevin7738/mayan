@@ -18,6 +18,8 @@ from formtools.wizard.views import SessionWizardView
 from mayan.apps.dynamic_search.forms import DocumentTypeSelectFormInSearch, MetadataTypeSelectFormInSearch, MetadataValueSelectFormInSearch
 from django.http import HttpResponseRedirect
 from mayan.apps.metadata.models import MetadataType, DocumentMetadata, DocumentTypeMetadataType
+
+from mayan.apps.documents.permissions import permission_document_type_view, permission_document_view
 logger = logging.getLogger(name=__name__)
 
 
@@ -112,10 +114,15 @@ class ContactWizard(SessionWizardView):
         MetadataTypeSelectFormInSearch,
         MetadataValueSelectFormInSearch,
     ]
-
     
     def get_form_kwargs(self, step=None):
         kwargs = {}
+        if step == '0':
+            kwargs.update({
+                'permission': permission_document_view,
+                'user': self.request.user
+            })
+
         if step == '1':          
             document_type = self.get_cleaned_data_for_step('0')['document_type__label']
             kwargs.update({'document_type' : document_type})
