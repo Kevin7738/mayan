@@ -43,6 +43,7 @@ class ContactForm2(forms.Form):
 class DocumentTypeSelectFormInSearch(forms.Form):
     
     def __init__(self, *args, **kwargs):
+       
         help_text = kwargs.pop('help_text', None)
         if kwargs.pop('allow_multiple', False):
             extra_kwargs = {}
@@ -57,7 +58,8 @@ class DocumentTypeSelectFormInSearch(forms.Form):
         user = kwargs.pop('user', None)
     
         super(DocumentTypeSelectFormInSearch, self).__init__(*args, **kwargs)
-
+       
+        
         queryset = DocumentType.objects.all().order_by('label')
         if permission:
             queryset = AccessControlList.objects.restrict_queryset(
@@ -69,6 +71,7 @@ class DocumentTypeSelectFormInSearch(forms.Form):
             queryset=queryset, required=True,
             widget=widget_class(attrs={'class': 'select2', 'size': 10}),
             to_field_name='label',
+            error_messages={'required':'Please select a document type.'},
             **extra_kwargs
         )
     
