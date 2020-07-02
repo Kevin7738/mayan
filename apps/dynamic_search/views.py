@@ -105,10 +105,9 @@ class SearchAgainView(RedirectView):
     pattern_name = 'search:search_advanced'
     query_string = True
 
-class ContactWizard(SessionWizardView):
+class DocumentSearchWizard(SessionWizardView):
     template_name = 'dynamic_search/wizard_form.html'
-    # Can do? subtitle "Hooking the wizard into a URLconf"
-    # https://django-formtools.readthedocs.io/en/latest/wizard.html#wizard-template-for-each-form
+
     form_list = [
         DocumentTypeSelectFormInSearch, 
         MetadataTypeSelectFormInSearch,
@@ -128,7 +127,6 @@ class ContactWizard(SessionWizardView):
             kwargs.update({'document_type' : document_type})
 
             # step0_doc_id = self.get_cleaned_data_for_step('0')['document_type__label'].pk
-            # kwargs.update({'step0_doc_id' : step0_doc_id})
 
         if step == '2':
             hasMetadataType = self.get_cleaned_data_for_step('1')['metadata__metadata_type__name']
@@ -174,4 +172,3 @@ class ContactWizard(SessionWizardView):
         '&metadata__value='+metadataValue+
         '&q='
         )
-        # return HttpResponseRedirect(reverse('search:results'))

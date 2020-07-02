@@ -13,7 +13,7 @@ from .views import (
     RootView, SetupListView, ToolsListView, 
 )
 
-from mayan.apps.dynamic_search.views import ContactWizard 
+from mayan.apps.dynamic_search.views import DocumentSearchWizard
 
 urlpatterns_error_logs = [
     url(
@@ -51,7 +51,7 @@ urlpatterns_misc = [
 urlpatterns = [
     url(regex=r'^$', name='root', view=RootView.as_view()),
     url(regex=r'^home/$', name='home', view=HomeView.as_view()),
-    url(regex=r'^home/search/$', name='con', view=ContactWizard.as_view()),
+    url(regex=r'^home/search/$', name='con', view=DocumentSearchWizard.as_view()),
     url(regex=r'^about/$', name='about_view', view=AboutView.as_view()),
     url(regex=r'^license/$', name='license_view', view=LicenseView.as_view()),
     url(regex=r'^setup/$', name='setup_list', view=SetupListView.as_view()),

@@ -34,12 +34,6 @@ class SearchForm(forms.Form):
     )
 
 
-class ContactForm1(forms.Form):
-    inputDocType = forms.CharField(max_length=100)
-
-class ContactForm2(forms.Form):
-    inputMetadataType = forms.CharField(max_length=100)
-
 class DocumentTypeSelectFormInSearch(forms.Form):
     
     def __init__(self, *args, **kwargs):
@@ -117,8 +111,8 @@ class MetadataTypeSelectFormInSearch(forms.Form):
                 valued_document_id_list.append(document.id)
 
         valued_metadata_type_id_list = DocumentMetadata.objects.all().values_list('metadata_type_id', flat=True).filter(document_id__in=valued_document_id_list)          
-        
-        # k = DocumentTypeMetadataType.objects.all().values_list('metadata_type_id', flat=True).filter(document_type__pk=document_id)
+        # metadataType = DocumentTypeMetadataType.objects.all().values_list('metadata_type_id', flat=True).filter(document_type__pk=document_id)
+
         queryset = MetadataType.objects.all().filter(pk__in=valued_metadata_type_id_list)
         if permission:
             queryset = AccessControlList.objects.restrict_queryset(
