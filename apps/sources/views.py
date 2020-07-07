@@ -490,8 +490,8 @@ class UploadInteractiveView(UploadBaseView):
     def get_context_data(self, **kwargs):
         context = super(UploadInteractiveView, self).get_context_data(**kwargs)
         context['title'] = _(
-            'Upload a document of type "%(document_type)s" from '
-            'source: %(source)s'
+            'Upload a document of type "%(document_type)s"  '
+          
         ) % {'document_type': self.document_type, 'source': self.source.label}
 
         if not isinstance(self.source, StagingFolderSource) and not isinstance(self.source, SaneScanner):
